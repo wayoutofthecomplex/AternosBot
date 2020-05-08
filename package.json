@@ -1,8 +1,8 @@
 {
   "name": "aternosbot",
-  "version": "2.0.0",
+  "version": "2.1.1",
   "description": "Бот, который прогружает сервер на Aternos'e",
-  "server.js": "index.js",
+  "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },

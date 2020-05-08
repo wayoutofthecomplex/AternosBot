@@ -1,5 +1,5 @@
 # Афк бот для атерноса
-[![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy?template=https://github.com/wayoutofthecomplex/AternosBot)
+[![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy?template=https://github.com/rqbik/AternosBot)
 
 Бот, который может прогружать сервер, который стоит на атерносе.
 

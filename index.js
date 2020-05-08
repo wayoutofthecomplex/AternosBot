@@ -153,18 +153,21 @@ const bindEvents = () => {
   });
   client.on("chat", async packet => {
     let parsedMessage = JSON.parse(packet.message);
-    console.log(parsedMessage);
     if (process.env.debug) console.log(parsedMessage);
     if (
-      parsedMessage.translate != "chat.type.text" ||
-      parsedMessage.with[0].text == client.username
+      (parsedMessage.translate != "chat.type.text" ||
+      parsedMessage.with[0].text == client.username) &&
+      (!parsedMessage.extra)
     )
       return;
+    if (parsedMessage.extra) {
+      if (!parsedMessage.extra[0].text.match(/<.*>/)) return
+    }
     let message = {
-      text: parsedMessage.with[1],
-      author: `<${parsedMessage.with[0].text}>`
+      text: parsedMessage.with ? parsedMessage.with[1] : parsedMessage.extra[0].text.replace(/<.*> /, ''),
+      author: parsedMessage.with ? parsedMessage.with[0].text : parsedMessage.extra[0].text.match(/<.*>/)[0]
     };
-    console.log(message.author + " | " + message.text);
+    if (message.author.replace(/<|>/g, '') == client.username) return
     if (awaitingCustomInput && awaitingCustomInput == "moveDelay") {
       if (isNaN(message.text))
         return client.write("chat", {
@@ -263,6 +266,7 @@ const bindEvents = () => {
                 flags: 0,
                 teleportId: packet.teleportId
               };
+              if (process.env.debug) console.log("Движение:", newpacket, packet)
               client.write("position", newpacket);
               client.write("teleport_confirm", {
                 teleportId: packet.teleportId
@@ -296,14 +300,6 @@ const bindEvents = () => {
           message: 'Остановить движение можно прописав "$Стоп".'
         });
         break;
-      case "двигайся-круг":
-        const moveInCircle = () => {
-
-        }
-        const calculateCoordinates = (originalCoordinates) => {
-          let { x, y, z } = originalCoordinates
-          let newX = x + 2
-        }
       case "стоп":
         if (!moveTimeoutActive)
           return client.write("chat", { message: "Бот не двигается." });
